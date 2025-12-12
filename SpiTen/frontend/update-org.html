@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Update Organization - SPITEN</title>
+    <link rel="stylesheet" href="./styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🚀</text></svg>">
+  </head>
+  <body class="login-page">
+    <div style="max-width: 560px; width: 100%; padding: 24px;">
+      <div style="text-align: center; margin-bottom: 32px;">
+        <a href="landing.html" style="text-decoration: none;">
+          <div class="login-logo">S</div>
+        </a>
+        <h1 style="font-size: 28px; font-weight: 700; color: var(--text-primary); margin-bottom: 8px;">Update Organization</h1>
+        <p style="color: var(--text-secondary);">Modify organization settings and credentials</p>
+      </div>
+
+      <div class="card">
+        <div class="card-body">
+          <form id="update-org-form">
+            <div class="form-group">
+              <label class="form-label">Current Organization Name <span style="color: var(--accent-red);">*</span></label>
+              <input type="text" name="organization_name" id="org-name-input" class="form-input" placeholder="Enter organization name" required>
+            </div>
+
+            <div style="border-top: 1px solid var(--border-color); margin: 24px 0; padding-top: 24px;">
+              <p style="font-size: 14px; color: var(--text-muted); margin-bottom: 16px;">
+                <i class="fas fa-info-circle"></i> Leave fields blank to keep unchanged
+              </p>
+
+              <div class="form-group">
+                <label class="form-label">New Organization Name</label>
+                <input type="text" name="new_organization_name" class="form-input" placeholder="New name (optional)">
+              </div>
+
+              <div class="form-group">
+                <label class="form-label">New Email</label>
+                <input type="email" name="email" class="form-input" placeholder="New email (optional)">
+              </div>
+
+              <div class="form-group">
+                <label class="form-label">New Password</label>
+                <input type="password" name="password" class="form-input" placeholder="New password (optional)">
+              </div>
+            </div>
+
+            <div id="update-result" style="display: none;"></div>
+
+            <button type="submit" class="btn btn-primary w-100" id="submit-btn">
+              <i class="fas fa-save"></i> Save Changes
+            </button>
+          </form>
+        </div>
+      </div>
+
+      <div style="text-align: center; margin-top: 24px;">
+        <a href="admin.html" style="color: var(--text-secondary); text-decoration: none; font-size: 14px;">
+          <i class="fas fa-arrow-left"></i> Back to Admin Panel
+        </a>
+      </div>
+    </div>
+
+    <script src="./app.js"></script>
+    <script>
+      // Check for org param in URL
+      document.addEventListener('DOMContentLoaded', () => {
+        const params = new URLSearchParams(window.location.search);
+        const orgName = params.get('name');
+        if (orgName) {
+          document.getElementById('org-name-input').value = orgName;
+        }
+      });
+
+      document.getElementById('update-org-form').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const form = e.target;
+        const fd = new FormData(form);
+        const orgName = fd.get('organization_name');
+        const btn = document.getElementById('submit-btn');
+        const resultEl = document.getElementById('update-result');
+        const origText = btn.innerHTML;
+
+        btn.disabled = true;
+        btn.innerHTML = '<div class="spinner" style="width: 20px; height: 20px; border-width: 2px;"></div> Saving...';
+        resultEl.style.display = 'none';
+
+        // Build update data - only include non-empty fields
+        const data = {};
+        if (fd.get('new_organization_name')) data.name = fd.get('new_organization_name');
+        if (fd.get('email')) data.admin_email = fd.get('email');
+        if (fd.get('password')) data.password = fd.get('password');
+
+        if (Object.keys(data).length === 0) {
+          resultEl.className = 'alert alert-warning';
+          resultEl.innerHTML = `
+            <i class="fas fa-exclamation-triangle alert-icon"></i>
+            <div class="alert-content">
+              <div class="alert-message">Please fill in at least one field to update</div>
+            </div>
+          `;
+          resultEl.style.display = 'flex';
+          btn.disabled = false;
+          btn.innerHTML = origText;
+          return;
+        }
+
+        try {
+          const resp = await apiFetch(`/organizations/${encodeURIComponent(orgName)}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data)
+          });
+
+          resultEl.className = 'alert alert-success';
+          resultEl.innerHTML = `
+            <i class="fas fa-check-circle alert-icon"></i>
+            <div class="alert-content">
+              <div class="alert-title">Organization Updated!</div>
+              <div class="alert-message">Changes have been saved successfully.</div>
+            </div>
+          `;
+          resultEl.style.display = 'flex';
+
+          // Update the org name field if name was changed
+          if (data.name) {
+            document.getElementById('org-name-input').value = data.name;
+          }
+
+          // Clear the optional fields
+          form.querySelector('input[name="new_organization_name"]').value = '';
+          form.querySelector('input[name="email"]').value = '';
+          form.querySelector('input[name="password"]').value = '';
+
+        } catch (err) {
+          resultEl.className = 'alert alert-error';
+          resultEl.innerHTML = `
+            <i class="fas fa-exclamation-circle alert-icon"></i>
+            <div class="alert-content">
+              <div class="alert-title">Error</div>
+              <div class="alert-message">${err.message || 'Failed to update organization'}</div>
+            </div>
+          `;
+          resultEl.style.display = 'flex';
+        }
+
+        btn.disabled = false;
+        btn.innerHTML = origText;
+      });
+    </script>
+  </body>
+</html>

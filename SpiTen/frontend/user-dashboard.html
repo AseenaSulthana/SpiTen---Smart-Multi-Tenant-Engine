@@ -1,0 +1,449 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>SPITEN - Organization Dashboard</title>
+    <link rel="stylesheet" href="./styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🚀</text></svg>">
+  </head>
+  <body>
+    <div class="app-layout">
+      <!-- Sidebar -->
+      <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+          <a href="landing.html" class="sidebar-logo">
+            <div class="sidebar-logo-icon">S</div>
+            <span class="sidebar-logo-text">SPITEN</span>
+          </a>
+        </div>
+        <nav class="sidebar-nav">
+          <div class="nav-section">
+            <div class="nav-section-title">Menu</div>
+            <a href="user-dashboard.html" class="nav-item active">
+              <i class="fas fa-home"></i>
+              <span>Dashboard</span>
+            </a>
+            <a href="#" class="nav-item">
+              <i class="fas fa-chart-bar"></i>
+              <span>Analytics</span>
+            </a>
+            <a href="#" class="nav-item">
+              <i class="fas fa-users"></i>
+              <span>Team</span>
+            </a>
+            <a href="#" class="nav-item">
+              <i class="fas fa-file-alt"></i>
+              <span>Reports</span>
+            </a>
+          </div>
+          <div class="nav-section">
+            <div class="nav-section-title">Account</div>
+            <a href="#" class="nav-item" id="settings-btn">
+              <i class="fas fa-cog"></i>
+              <span>Settings</span>
+            </a>
+            <a href="#" id="logout-btn" class="nav-item">
+              <i class="fas fa-sign-out-alt"></i>
+              <span>Logout</span>
+            </a>
+          </div>
+        </nav>
+        <div class="sidebar-footer">
+          <div class="user-profile" id="user-profile">
+            <div class="user-avatar" id="user-avatar">O</div>
+            <div class="user-info">
+              <div class="user-name" id="user-name">Organization</div>
+              <div class="user-role">Member</div>
+            </div>
+          </div>
+        </div>
+      </aside>
+
+      <!-- Main Content -->
+      <div class="main-content">
+        <!-- Header -->
+        <header class="header">
+          <div class="header-left">
+            <button class="menu-toggle" id="menu-toggle">
+              <i class="fas fa-bars"></i>
+            </button>
+            <h1 class="page-title">Dashboard</h1>
+          </div>
+          <div class="header-right">
+            <div class="search-box">
+              <i class="fas fa-search"></i>
+              <input type="text" placeholder="Search...">
+            </div>
+            <div class="header-actions">
+              <button class="header-btn" title="Notifications">
+                <i class="fas fa-bell"></i>
+                <span class="badge"></span>
+              </button>
+              <div class="header-avatar" id="header-avatar">O</div>
+            </div>
+          </div>
+        </header>
+
+        <!-- Page Content -->
+        <div class="page-content">
+          <!-- Welcome Banner -->
+          <div class="welcome-banner" id="welcome-banner">
+            <div class="welcome-content">
+              <h2>Welcome back, <span id="org-name-display">Organization</span>! 👋</h2>
+              <p>Here's an overview of your organization's activity and settings.</p>
+            </div>
+            <div>
+              <button class="btn" style="background: rgba(255,255,255,0.2); color: white; border: none;" id="edit-profile-btn">
+                <i class="fas fa-edit"></i> Edit Profile
+              </button>
+            </div>
+          </div>
+
+          <!-- Stats Grid -->
+          <div class="stats-grid">
+            <div class="stat-card">
+              <div class="stat-icon pink">
+                <i class="fas fa-users"></i>
+              </div>
+              <div class="stat-content">
+                <div class="stat-value">12</div>
+                <div class="stat-label">Team Members</div>
+                <div class="stat-change positive">
+                  <i class="fas fa-arrow-up"></i> +3 this month
+                </div>
+              </div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-icon blue">
+                <i class="fas fa-folder"></i>
+              </div>
+              <div class="stat-content">
+                <div class="stat-value">28</div>
+                <div class="stat-label">Projects</div>
+                <div class="stat-change positive">
+                  <i class="fas fa-arrow-up"></i> +5 this month
+                </div>
+              </div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-icon green">
+                <i class="fas fa-check-circle"></i>
+              </div>
+              <div class="stat-content">
+                <div class="stat-value">95%</div>
+                <div class="stat-label">Completion Rate</div>
+              </div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-icon orange">
+                <i class="fas fa-clock"></i>
+              </div>
+              <div class="stat-content">
+                <div class="stat-value">Active</div>
+                <div class="stat-label">Account Status</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Charts Row -->
+          <div class="charts-grid">
+            <!-- Progress Card -->
+            <div class="card">
+              <div class="card-header">
+                <div>
+                  <h3 class="card-title">Weekly Progress</h3>
+                  <p class="card-subtitle">Your activity this week</p>
+                </div>
+              </div>
+              <div class="card-body">
+                <div class="progress-list">
+                  <div class="progress-item">
+                    <div class="progress-header">
+                      <span class="progress-label">Tasks Completed</span>
+                      <span class="progress-value">78%</span>
+                    </div>
+                    <div class="progress-bar">
+                      <div class="progress-fill pink" style="width: 78%;"></div>
+                    </div>
+                  </div>
+                  <div class="progress-item">
+                    <div class="progress-header">
+                      <span class="progress-label">Projects Updated</span>
+                      <span class="progress-value">92%</span>
+                    </div>
+                    <div class="progress-bar">
+                      <div class="progress-fill blue" style="width: 92%;"></div>
+                    </div>
+                  </div>
+                  <div class="progress-item">
+                    <div class="progress-header">
+                      <span class="progress-label">Team Engagement</span>
+                      <span class="progress-value">65%</span>
+                    </div>
+                    <div class="progress-bar">
+                      <div class="progress-fill green" style="width: 65%;"></div>
+                    </div>
+                  </div>
+                  <div class="progress-item">
+                    <div class="progress-header">
+                      <span class="progress-label">Goals Achieved</span>
+                      <span class="progress-value">85%</span>
+                    </div>
+                    <div class="progress-bar">
+                      <div class="progress-fill purple" style="width: 85%;"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Quick Actions -->
+            <div class="card">
+              <div class="card-header">
+                <div>
+                  <h3 class="card-title">Quick Actions</h3>
+                  <p class="card-subtitle">Frequently used actions</p>
+                </div>
+              </div>
+              <div class="card-body">
+                <div class="quick-actions" style="grid-template-columns: 1fr 1fr;">
+                  <a href="#" class="action-card" id="change-password-btn">
+                    <div class="action-icon pink">
+                      <i class="fas fa-key"></i>
+                    </div>
+                    <div class="action-title">Change Password</div>
+                  </a>
+                  <a href="#" class="action-card">
+                    <div class="action-icon blue">
+                      <i class="fas fa-user-plus"></i>
+                    </div>
+                    <div class="action-title">Invite Member</div>
+                  </a>
+                  <a href="#" class="action-card">
+                    <div class="action-icon green">
+                      <i class="fas fa-download"></i>
+                    </div>
+                    <div class="action-title">Export Data</div>
+                  </a>
+                  <a href="#" class="action-card">
+                    <div class="action-icon orange">
+                      <i class="fas fa-cog"></i>
+                    </div>
+                    <div class="action-title">Settings</div>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Organization Details -->
+          <div class="card mt-3">
+            <div class="card-header">
+              <div>
+                <h3 class="card-title">Organization Details</h3>
+                <p class="card-subtitle">Your account information</p>
+              </div>
+              <button class="btn btn-sm btn-secondary" id="refresh-details-btn">
+                <i class="fas fa-sync-alt"></i> Refresh
+              </button>
+            </div>
+            <div class="card-body">
+              <div id="org-details" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 24px;">
+                <div>
+                  <div style="font-size: 12px; text-transform: uppercase; color: var(--text-muted); margin-bottom: 4px;">Organization Name</div>
+                  <div style="font-size: 16px; font-weight: 600;" id="detail-name">-</div>
+                </div>
+                <div>
+                  <div style="font-size: 12px; text-transform: uppercase; color: var(--text-muted); margin-bottom: 4px;">Admin Email</div>
+                  <div style="font-size: 16px; font-weight: 600;" id="detail-email">-</div>
+                </div>
+                <div>
+                  <div style="font-size: 12px; text-transform: uppercase; color: var(--text-muted); margin-bottom: 4px;">Created At</div>
+                  <div style="font-size: 16px; font-weight: 600;" id="detail-created">-</div>
+                </div>
+                <div>
+                  <div style="font-size: 12px; text-transform: uppercase; color: var(--text-muted); margin-bottom: 4px;">Status</div>
+                  <div><span class="status-badge active"><i class="fas fa-circle"></i> Active</span></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Recent Activity -->
+          <div class="card mt-3">
+            <div class="card-header">
+              <div>
+                <h3 class="card-title">Recent Activity</h3>
+                <p class="card-subtitle">Latest updates in your organization</p>
+              </div>
+            </div>
+            <div class="card-body">
+              <div class="activity-list">
+                <div class="activity-item">
+                  <div class="activity-icon pink" style="background: var(--primary-light); color: var(--primary);">
+                    <i class="fas fa-sign-in-alt"></i>
+                  </div>
+                  <div class="activity-content">
+                    <div class="activity-text"><strong>You</strong> logged in to the dashboard</div>
+                    <div class="activity-time">Just now</div>
+                  </div>
+                </div>
+                <div class="activity-item">
+                  <div class="activity-icon" style="background: #dbeafe; color: var(--accent-blue);">
+                    <i class="fas fa-cog"></i>
+                  </div>
+                  <div class="activity-content">
+                    <div class="activity-text"><strong>System</strong> completed daily backup</div>
+                    <div class="activity-time">2 hours ago</div>
+                  </div>
+                </div>
+                <div class="activity-item">
+                  <div class="activity-icon" style="background: #dcfce7; color: var(--accent-green);">
+                    <i class="fas fa-check"></i>
+                  </div>
+                  <div class="activity-content">
+                    <div class="activity-text"><strong>Account</strong> verified successfully</div>
+                    <div class="activity-time">1 day ago</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Change Password Modal -->
+    <div class="modal-overlay" id="password-modal">
+      <div class="modal">
+        <div class="modal-header">
+          <h3 class="modal-title">Change Password</h3>
+          <button class="modal-close" onclick="closePasswordModal()">
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+        <form id="password-form">
+          <div class="modal-body">
+            <div class="form-group">
+              <label class="form-label">Current Password</label>
+              <input type="password" name="current" class="form-input" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label">New Password</label>
+              <input type="password" name="newPassword" class="form-input" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Confirm New Password</label>
+              <input type="password" name="confirm" class="form-input" required>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" onclick="closePasswordModal()">Cancel</button>
+            <button type="submit" class="btn btn-primary">
+              <i class="fas fa-save"></i> Update Password
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <script src="./app.js"></script>
+    <script>
+      let currentOrg = null;
+
+      document.addEventListener('DOMContentLoaded', () => {
+        // Get org from URL or storage
+        const params = new URLSearchParams(window.location.search);
+        currentOrg = params.get('org') || localStorage.getItem('current_org');
+        
+        if (!currentOrg) {
+          window.location.href = 'login.html';
+          return;
+        }
+
+        // Update UI with org name
+        const initial = currentOrg[0].toUpperCase();
+        document.getElementById('user-avatar').textContent = initial;
+        document.getElementById('header-avatar').textContent = initial;
+        document.getElementById('user-name').textContent = currentOrg;
+        document.getElementById('org-name-display').textContent = currentOrg;
+        document.title = `${currentOrg} - Dashboard | SPITEN`;
+
+        // Menu toggle
+        document.getElementById('menu-toggle').addEventListener('click', () => {
+          document.getElementById('sidebar').classList.toggle('collapsed');
+          document.querySelector('.main-content').classList.toggle('expanded');
+        });
+
+        // Logout
+        document.getElementById('logout-btn').addEventListener('click', (e) => {
+          e.preventDefault();
+          localStorage.removeItem('spi_token');
+          localStorage.removeItem('current_org');
+          window.location.href = 'login.html';
+        });
+
+        // Change password modal
+        document.getElementById('change-password-btn').addEventListener('click', (e) => {
+          e.preventDefault();
+          document.getElementById('password-modal').classList.add('active');
+        });
+
+        // Edit profile
+        document.getElementById('edit-profile-btn').addEventListener('click', () => {
+          window.location.href = `update-org.html?name=${encodeURIComponent(currentOrg)}`;
+        });
+
+        // Refresh details
+        document.getElementById('refresh-details-btn').addEventListener('click', loadOrgDetails);
+
+        // Password form
+        document.getElementById('password-form').addEventListener('submit', async (e) => {
+          e.preventDefault();
+          const fd = new FormData(e.target);
+          if (fd.get('newPassword') !== fd.get('confirm')) {
+            alert('Passwords do not match');
+            return;
+          }
+          
+          try {
+            await apiFetch(`/organizations/${encodeURIComponent(currentOrg)}`, {
+              method: 'PUT',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ password: fd.get('newPassword') })
+            });
+            alert('Password updated successfully');
+            closePasswordModal();
+          } catch (err) {
+            alert('Failed to update password: ' + err.message);
+          }
+        });
+
+        // Load org details
+        loadOrgDetails();
+      });
+
+      async function loadOrgDetails() {
+        try {
+          const resp = await apiFetch(`/organizations/${encodeURIComponent(currentOrg)}`);
+          const org = resp?.data?.organization || resp?.data;
+          
+          if (org) {
+            document.getElementById('detail-name').textContent = org.name || org.organization_name || currentOrg;
+            document.getElementById('detail-email').textContent = org.admin_email || org.email || '-';
+            document.getElementById('detail-created').textContent = org.created_at ? new Date(org.created_at).toLocaleDateString() : '-';
+          }
+        } catch (err) {
+          console.log('Could not load org details:', err.message);
+        }
+      }
+
+      function closePasswordModal() {
+        document.getElementById('password-modal').classList.remove('active');
+        document.getElementById('password-form').reset();
+      }
+    </script>
+  </body>
+</html>

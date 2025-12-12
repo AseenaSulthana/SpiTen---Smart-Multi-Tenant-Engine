@@ -1,0 +1,105 @@
+{
+  "info": {
+    "name": "SpiTen API",
+    "description": "Multi-tenant organization management API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "BASE_URL",
+      "value": "http://localhost:8000"
+    },
+    {
+      "key": "AUTH_TOKEN",
+      "value": ""
+    }
+  ],
+  "item": [
+    {
+      "name": "Organizations",
+      "item": [
+        {
+          "name": "Create Organization",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": { "raw": "{{BASE_URL}}/org/create", "host": ["{{BASE_URL}}"], "path": ["org", "create"] },
+            "body": {
+              "mode": "raw",
+              "raw": "{\"organization_name\": \"acme\", \"email\": \"admin@acme.com\", \"password\": \"SecurePass123!\"}"
+            }
+          }
+        },
+        {
+          "name": "Get Organization",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{BASE_URL}}/org/get?organization_name=acme",
+              "host": ["{{BASE_URL}}"],
+              "path": ["org", "get"],
+              "query": [{ "key": "organization_name", "value": "acme" }]
+            }
+          }
+        },
+        {
+          "name": "Update Organization",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{AUTH_TOKEN}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "url": { "raw": "{{BASE_URL}}/org/update", "host": ["{{BASE_URL}}"], "path": ["org", "update"] },
+            "body": {
+              "mode": "raw",
+              "raw": "{\"organization_name\": \"acme\", \"email\": \"newemail@acme.com\"}"
+            }
+          }
+        },
+        {
+          "name": "Delete Organization",
+          "request": {
+            "method": "DELETE",
+            "header": [{ "key": "Authorization", "value": "Bearer {{AUTH_TOKEN}}" }],
+            "url": {
+              "raw": "{{BASE_URL}}/org/delete?organization_name=acme",
+              "host": ["{{BASE_URL}}"],
+              "path": ["org", "delete"],
+              "query": [{ "key": "organization_name", "value": "acme" }]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Authentication",
+      "item": [
+        {
+          "name": "Login",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": { "raw": "{{BASE_URL}}/admin/login", "host": ["{{BASE_URL}}"], "path": ["admin", "login"] },
+            "body": {
+              "mode": "raw",
+              "raw": "{\"email\": \"admin@acme.com\", \"password\": \"SecurePass123!\"}"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Metrics",
+      "item": [
+        {
+          "name": "Get Metrics",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{BASE_URL}}/metrics", "host": ["{{BASE_URL}}"], "path": ["metrics"] }
+          }
+        }
+      ]
+    }
+  ]
+}

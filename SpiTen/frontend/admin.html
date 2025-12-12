@@ -1,0 +1,459 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>SPITEN - Admin Panel</title>
+    <link rel="stylesheet" href="./styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🚀</text></svg>">
+  </head>
+  <body>
+    <div class="app-layout">
+      <!-- Sidebar -->
+      <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+          <a href="landing.html" class="sidebar-logo">
+            <div class="sidebar-logo-icon">S</div>
+            <span class="sidebar-logo-text">SPITEN</span>
+          </a>
+        </div>
+        <nav class="sidebar-nav">
+          <div class="nav-section">
+            <div class="nav-section-title">Main</div>
+            <a href="admin.html" class="nav-item active">
+              <i class="fas fa-th-large"></i>
+              <span>Dashboard</span>
+            </a>
+            <a href="create-org.html" class="nav-item">
+              <i class="fas fa-plus"></i>
+              <span>Create Org</span>
+            </a>
+            <a href="get-org.html" class="nav-item">
+              <i class="fas fa-search"></i>
+              <span>Find Org</span>
+            </a>
+          </div>
+          <div class="nav-section">
+            <div class="nav-section-title">Settings</div>
+            <a href="#" class="nav-item">
+              <i class="fas fa-cog"></i>
+              <span>Settings</span>
+            </a>
+            <a href="#" id="logout-btn" class="nav-item">
+              <i class="fas fa-sign-out-alt"></i>
+              <span>Logout</span>
+            </a>
+          </div>
+        </nav>
+        <div class="sidebar-footer">
+          <div class="user-profile">
+            <div class="user-avatar">A</div>
+            <div class="user-info">
+              <div class="user-name">Admin User</div>
+              <div class="user-role">Administrator</div>
+            </div>
+          </div>
+        </div>
+      </aside>
+
+      <!-- Main Content -->
+      <div class="main-content">
+        <!-- Header -->
+        <header class="header">
+          <div class="header-left">
+            <button class="menu-toggle" id="menu-toggle">
+              <i class="fas fa-bars"></i>
+            </button>
+            <h1 class="page-title">Admin Dashboard</h1>
+          </div>
+          <div class="header-right">
+            <div class="search-box">
+              <i class="fas fa-search"></i>
+              <input type="text" id="search-input" placeholder="Search organizations...">
+            </div>
+            <div class="header-actions">
+              <button class="header-btn" id="refresh-btn" title="Refresh">
+                <i class="fas fa-sync-alt"></i>
+              </button>
+              <button class="header-btn" title="Notifications">
+                <i class="fas fa-bell"></i>
+                <span class="badge"></span>
+              </button>
+            </div>
+          </div>
+        </header>
+
+        <!-- Page Content -->
+        <div class="page-content">
+          <!-- Welcome Banner -->
+          <div class="welcome-banner">
+            <div class="welcome-content">
+              <h2>Welcome to Admin Panel</h2>
+              <p>Manage all organizations, users, and system settings from here.</p>
+            </div>
+            <div style="display: flex; gap: 12px;">
+              <button id="seed-demo-btn" class="btn btn-secondary" style="background: rgba(255,255,255,0.2); border: none; color: white;">
+                <i class="fas fa-database"></i> Seed Demo
+              </button>
+              <a href="create-org.html" class="btn" style="background: white; color: var(--primary);">
+                <i class="fas fa-plus"></i> New Organization
+              </a>
+            </div>
+          </div>
+
+          <!-- Stats Grid -->
+          <div class="stats-grid">
+            <div class="stat-card">
+              <div class="stat-icon pink">
+                <i class="fas fa-building"></i>
+              </div>
+              <div class="stat-content">
+                <div class="stat-value" id="total-orgs">0</div>
+                <div class="stat-label">Total Organizations</div>
+                <div class="stat-change positive">
+                  <i class="fas fa-arrow-up"></i> Active
+                </div>
+              </div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-icon green">
+                <i class="fas fa-check-circle"></i>
+              </div>
+              <div class="stat-content">
+                <div class="stat-value" id="active-orgs">0</div>
+                <div class="stat-label">Active Organizations</div>
+                <div class="stat-change positive">
+                  <i class="fas fa-arrow-up"></i> Running
+                </div>
+              </div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-icon blue">
+                <i class="fas fa-users"></i>
+              </div>
+              <div class="stat-content">
+                <div class="stat-value" id="total-admins">1</div>
+                <div class="stat-label">Admin Users</div>
+              </div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-icon orange">
+                <i class="fas fa-clock"></i>
+              </div>
+              <div class="stat-content">
+                <div class="stat-value" id="last-updated">-</div>
+                <div class="stat-label">Last Updated</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Organizations Table -->
+          <div class="card">
+            <div class="card-header">
+              <div>
+                <h3 class="card-title">All Organizations</h3>
+                <p class="card-subtitle">Manage your organization accounts</p>
+              </div>
+              <div style="display: flex; gap: 8px;">
+                <button class="btn btn-sm btn-secondary" id="export-btn">
+                  <i class="fas fa-download"></i> Export
+                </button>
+              </div>
+            </div>
+            <div class="card-body p-0">
+              <div class="table-container">
+                <table class="data-table" id="org-table">
+                  <thead>
+                    <tr>
+                      <th>Organization</th>
+                      <th>Admin Email</th>
+                      <th>Created</th>
+                      <th>Status</th>
+                      <th>Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td colspan="5" class="text-center p-4">
+                        <div class="spinner" style="margin: 20px auto;"></div>
+                        <p class="text-muted mt-2">Loading organizations...</p>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <!-- System Metrics -->
+          <div class="card mt-3">
+            <div class="card-header">
+              <div>
+                <h3 class="card-title">System Metrics</h3>
+                <p class="card-subtitle">Real-time system performance</p>
+              </div>
+            </div>
+            <div class="card-body">
+              <div id="metrics-panel" class="stats-grid" style="margin-bottom: 0;">
+                <div class="stat-card">
+                  <div class="stat-icon purple">
+                    <i class="fas fa-server"></i>
+                  </div>
+                  <div class="stat-content">
+                    <div class="stat-value">Online</div>
+                    <div class="stat-label">API Status</div>
+                  </div>
+                </div>
+                <div class="stat-card">
+                  <div class="stat-icon green">
+                    <i class="fas fa-database"></i>
+                  </div>
+                  <div class="stat-content">
+                    <div class="stat-value">Connected</div>
+                    <div class="stat-label">Database</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Delete Confirmation Modal -->
+    <div class="modal-overlay" id="delete-modal">
+      <div class="modal">
+        <div class="modal-header">
+          <h3 class="modal-title">Delete Organization</h3>
+          <button class="modal-close" onclick="closeDeleteModal()">
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="alert alert-warning">
+            <i class="fas fa-exclamation-triangle alert-icon"></i>
+            <div class="alert-content">
+              <div class="alert-title">Are you sure?</div>
+              <div class="alert-message">This action cannot be undone. All data associated with <strong id="delete-org-name"></strong> will be permanently deleted.</div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-secondary" onclick="closeDeleteModal()">Cancel</button>
+          <button class="btn btn-danger" id="confirm-delete-btn">
+            <i class="fas fa-trash"></i> Delete
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <script src="./app.js"></script>
+    <script>
+      let orgToDelete = null;
+
+      document.addEventListener('DOMContentLoaded', () => {
+        // Check if admin is logged in
+        const token = localStorage.getItem('spi_token');
+        const adminRole = localStorage.getItem('admin_role');
+        
+        if (!token || adminRole !== 'superadmin') {
+          // Redirect to login if not authenticated as superadmin
+          alert('Please login as admin to access this page');
+          window.location.href = 'login.html';
+          return;
+        }
+
+        // Menu toggle
+        document.getElementById('menu-toggle').addEventListener('click', () => {
+          document.getElementById('sidebar').classList.toggle('collapsed');
+          document.querySelector('.main-content').classList.toggle('expanded');
+        });
+
+        // Logout handler
+        document.getElementById('logout-btn').addEventListener('click', (e) => {
+          e.preventDefault();
+          localStorage.removeItem('spi_token');
+          localStorage.removeItem('admin_role');
+          window.location.href = 'login.html';
+        });
+
+        // Refresh handler
+        document.getElementById('refresh-btn').addEventListener('click', () => {
+          loadOrganizations();
+          loadMetrics();
+        });
+
+        // Search handler
+        document.getElementById('search-input').addEventListener('input', (e) => {
+          filterOrganizations(e.target.value);
+        });
+
+        // Seed demo data
+        document.getElementById('seed-demo-btn').addEventListener('click', seedDemoData);
+
+        // Load initial data
+        loadOrganizations();
+        loadMetrics();
+      });
+
+      async function loadOrganizations() {
+        const tbody = document.querySelector('#org-table tbody');
+        tbody.innerHTML = `<tr><td colspan="5" class="text-center p-4"><div class="spinner" style="margin: 20px auto;"></div><p class="text-muted mt-2">Loading...</p></td></tr>`;
+        
+        try {
+          const resp = await apiFetch('/organizations');
+          const orgs = resp?.data?.organizations || resp?.data || [];
+          
+          document.getElementById('total-orgs').textContent = orgs.length;
+          document.getElementById('active-orgs').textContent = orgs.length;
+          document.getElementById('last-updated').textContent = new Date().toLocaleTimeString();
+          
+          if (orgs.length === 0) {
+            tbody.innerHTML = `
+              <tr>
+                <td colspan="5">
+                  <div class="empty-state">
+                    <div class="empty-icon"><i class="fas fa-building"></i></div>
+                    <h4 class="empty-title">No organizations yet</h4>
+                    <p class="empty-description">Get started by creating your first organization or seed demo data.</p>
+                    <div style="display: flex; gap: 12px; justify-content: center;">
+                      <button class="btn btn-secondary" onclick="seedDemoData()">
+                        <i class="fas fa-database"></i> Seed Demo
+                      </button>
+                      <a href="create-org.html" class="btn btn-primary">
+                        <i class="fas fa-plus"></i> Create Organization
+                      </a>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+            `;
+            return;
+          }
+          
+          tbody.innerHTML = orgs.map(org => `
+            <tr data-name="${(org.name || org.organization_name || '').toLowerCase()}">
+              <td>
+                <div class="table-user">
+                  <div class="table-avatar">${(org.name || org.organization_name || 'O')[0].toUpperCase()}</div>
+                  <div>
+                    <div class="table-user-name">${org.name || org.organization_name || 'N/A'}</div>
+                  </div>
+                </div>
+              </td>
+              <td>${org.admin_email || org.email || 'N/A'}</td>
+              <td>${org.created_at ? new Date(org.created_at).toLocaleDateString() : 'N/A'}</td>
+              <td><span class="status-badge active"><i class="fas fa-circle"></i> Active</span></td>
+              <td>
+                <div style="display: flex; gap: 4px;">
+                  <button class="btn btn-icon btn-ghost sm" title="View" onclick="window.location.href='user-dashboard.html?org=${encodeURIComponent(org.name || org.organization_name)}'">
+                    <i class="fas fa-eye"></i>
+                  </button>
+                  <button class="btn btn-icon btn-ghost sm" title="Edit" onclick="window.location.href='update-org.html?name=${encodeURIComponent(org.name || org.organization_name)}'">
+                    <i class="fas fa-edit"></i>
+                  </button>
+                  <button class="btn btn-icon btn-ghost sm" title="Delete" onclick="showDeleteModal('${org.name || org.organization_name}')">
+                    <i class="fas fa-trash" style="color: var(--accent-red);"></i>
+                  </button>
+                </div>
+              </td>
+            </tr>
+          `).join('');
+        } catch (err) {
+          tbody.innerHTML = `
+            <tr>
+              <td colspan="5">
+                <div class="alert alert-error">
+                  <i class="fas fa-exclamation-circle alert-icon"></i>
+                  <div class="alert-content">
+                    <div class="alert-message">Failed to load organizations: ${err.message}</div>
+                  </div>
+                </div>
+              </td>
+            </tr>
+          `;
+        }
+      }
+
+      async function loadMetrics() {
+        try {
+          const resp = await apiFetch('/metrics');
+          if (resp && resp.data) {
+            document.getElementById('total-admins').textContent = resp.data.admins || 1;
+          }
+        } catch (err) {
+          console.log('Metrics not available');
+        }
+      }
+
+      function filterOrganizations(query) {
+        const rows = document.querySelectorAll('#org-table tbody tr');
+        rows.forEach(row => {
+          const name = row.dataset.name || '';
+          row.style.display = name.includes(query.toLowerCase()) ? '' : 'none';
+        });
+      }
+
+      async function seedDemoData() {
+        const btn = document.getElementById('seed-demo-btn');
+        btn.disabled = true;
+        btn.innerHTML = '<div class="spinner" style="width: 16px; height: 16px; border-width: 2px;"></div> Seeding...';
+        
+        const demoOrgs = [
+          { name: 'Acme Corp', admin_email: 'admin@acme.com', password: 'password123' },
+          { name: 'Tech Solutions', admin_email: 'admin@techsol.com', password: 'password123' },
+          { name: 'Global Industries', admin_email: 'admin@global.com', password: 'password123' }
+        ];
+        
+        for (const org of demoOrgs) {
+          try {
+            await apiFetch('/organizations', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(org)
+            });
+          } catch (e) {
+            console.log('Org may already exist:', org.name);
+          }
+        }
+        
+        btn.disabled = false;
+        btn.innerHTML = '<i class="fas fa-database"></i> Seed Demo';
+        loadOrganizations();
+      }
+
+      function showDeleteModal(orgName) {
+        orgToDelete = orgName;
+        document.getElementById('delete-org-name').textContent = orgName;
+        document.getElementById('delete-modal').classList.add('active');
+      }
+
+      function closeDeleteModal() {
+        document.getElementById('delete-modal').classList.remove('active');
+        orgToDelete = null;
+      }
+
+      document.getElementById('confirm-delete-btn').addEventListener('click', async () => {
+        if (!orgToDelete) return;
+        
+        const btn = document.getElementById('confirm-delete-btn');
+        btn.disabled = true;
+        btn.innerHTML = '<div class="spinner" style="width: 16px; height: 16px; border-width: 2px;"></div> Deleting...';
+        
+        try {
+          await apiFetch(`/organizations/${encodeURIComponent(orgToDelete)}`, {
+            method: 'DELETE'
+          });
+          closeDeleteModal();
+          loadOrganizations();
+        } catch (err) {
+          alert('Failed to delete: ' + err.message);
+        }
+        
+        btn.disabled = false;
+        btn.innerHTML = '<i class="fas fa-trash"></i> Delete';
+      });
+    </script>
+  </body>
+</html>

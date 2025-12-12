@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>View Organization - SPITEN</title>
+    <link rel="stylesheet" href="./styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🚀</text></svg>">
+  </head>
+  <body class="login-page">
+    <div style="max-width: 600px; width: 100%; padding: 24px;">
+      <div style="text-align: center; margin-bottom: 32px;">
+        <a href="landing.html" style="text-decoration: none;">
+          <div class="login-logo">S</div>
+        </a>
+        <h1 style="font-size: 28px; font-weight: 700; color: var(--text-primary); margin-bottom: 8px;">View Organization</h1>
+        <p style="color: var(--text-secondary);">Retrieve complete information about an organization</p>
+      </div>
+
+      <div class="card">
+        <div class="card-body">
+          <form id="get-org-form">
+            <div class="form-group">
+              <label class="form-label">Organization Name <span style="color: var(--accent-red);">*</span></label>
+              <input type="text" name="organization_name" class="form-input" placeholder="Enter organization name" required>
+            </div>
+
+            <button type="submit" class="btn btn-primary w-100" id="submit-btn">
+              <i class="fas fa-search"></i> Fetch Details
+            </button>
+          </form>
+        </div>
+      </div>
+
+      <!-- Results Card -->
+      <div id="get-org-result" class="card mt-3" style="display: none;">
+        <div class="card-header">
+          <div>
+            <h3 class="card-title" id="result-org-name">Organization Details</h3>
+            <p class="card-subtitle">Retrieved information</p>
+          </div>
+          <span class="status-badge active"><i class="fas fa-circle"></i> Active</span>
+        </div>
+        <div class="card-body">
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px;">
+            <div>
+              <div style="font-size: 12px; text-transform: uppercase; color: var(--text-muted); margin-bottom: 4px;">
+                <i class="fas fa-building" style="margin-right: 6px;"></i>Organization Name
+              </div>
+              <div style="font-size: 16px; font-weight: 600;" id="detail-name">-</div>
+            </div>
+            <div>
+              <div style="font-size: 12px; text-transform: uppercase; color: var(--text-muted); margin-bottom: 4px;">
+                <i class="fas fa-envelope" style="margin-right: 6px;"></i>Admin Email
+              </div>
+              <div style="font-size: 16px; font-weight: 600;" id="detail-email">-</div>
+            </div>
+            <div>
+              <div style="font-size: 12px; text-transform: uppercase; color: var(--text-muted); margin-bottom: 4px;">
+                <i class="fas fa-calendar" style="margin-right: 6px;"></i>Created At
+              </div>
+              <div style="font-size: 16px; font-weight: 600;" id="detail-created">-</div>
+            </div>
+            <div>
+              <div style="font-size: 12px; text-transform: uppercase; color: var(--text-muted); margin-bottom: 4px;">
+                <i class="fas fa-id-card" style="margin-right: 6px;"></i>ID
+              </div>
+              <div style="font-size: 14px; font-family: monospace; color: var(--text-secondary);" id="detail-id">-</div>
+            </div>
+          </div>
+        </div>
+        <div class="card-footer" style="display: flex; gap: 12px;">
+          <a href="#" id="edit-btn" class="btn btn-secondary btn-sm">
+            <i class="fas fa-edit"></i> Edit
+          </a>
+          <a href="#" id="dashboard-btn" class="btn btn-primary btn-sm">
+            <i class="fas fa-th-large"></i> View Dashboard
+          </a>
+        </div>
+      </div>
+
+      <!-- Error Display -->
+      <div id="error-result" class="alert alert-error mt-3" style="display: none;">
+        <i class="fas fa-exclamation-circle alert-icon"></i>
+        <div class="alert-content">
+          <div class="alert-title">Error</div>
+          <div class="alert-message" id="error-message"></div>
+        </div>
+      </div>
+
+      <div style="text-align: center; margin-top: 24px;">
+        <a href="admin.html" style="color: var(--text-secondary); text-decoration: none; font-size: 14px;">
+          <i class="fas fa-arrow-left"></i> Back to Admin Panel
+        </a>
+      </div>
+    </div>
+
+    <script src="./app.js"></script>
+    <script>
+      // Check for org param in URL
+      document.addEventListener('DOMContentLoaded', () => {
+        const params = new URLSearchParams(window.location.search);
+        const orgName = params.get('name');
+        if (orgName) {
+          document.querySelector('input[name="organization_name"]').value = orgName;
+          document.getElementById('get-org-form').dispatchEvent(new Event('submit'));
+        }
+      });
+
+      document.getElementById('get-org-form').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const form = e.target;
+        const fd = new FormData(form);
+        const orgName = fd.get('organization_name');
+        const btn = document.getElementById('submit-btn');
+        const resultEl = document.getElementById('get-org-result');
+        const errorEl = document.getElementById('error-result');
+        const origText = btn.innerHTML;
+
+        btn.disabled = true;
+        btn.innerHTML = '<div class="spinner" style="width: 20px; height: 20px; border-width: 2px;"></div> Searching...';
+        resultEl.style.display = 'none';
+        errorEl.style.display = 'none';
+
+        try {
+          const resp = await apiFetch(`/organizations/${encodeURIComponent(orgName)}`);
+          const org = resp?.data?.organization || resp?.data;
+
+          if (org) {
+            document.getElementById('result-org-name').textContent = org.name || org.organization_name || orgName;
+            document.getElementById('detail-name').textContent = org.name || org.organization_name || orgName;
+            document.getElementById('detail-email').textContent = org.admin_email || org.email || '-';
+            document.getElementById('detail-created').textContent = org.created_at ? new Date(org.created_at).toLocaleString() : '-';
+            document.getElementById('detail-id').textContent = org._id || org.id || '-';
+            
+            document.getElementById('edit-btn').href = `update-org.html?name=${encodeURIComponent(org.name || org.organization_name || orgName)}`;
+            document.getElementById('dashboard-btn').href = `user-dashboard.html?org=${encodeURIComponent(org.name || org.organization_name || orgName)}`;
+            
+            resultEl.style.display = 'block';
+          } else {
+            throw new Error('Organization not found');
+          }
+        } catch (err) {
+          document.getElementById('error-message').textContent = err.message || 'Failed to fetch organization';
+          errorEl.style.display = 'flex';
+        }
+
+        btn.disabled = false;
+        btn.innerHTML = origText;
+      });
+    </script>
+  </body>
+</html>

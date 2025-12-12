@@ -1,0 +1,685 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>SPITEN - Login</title>
+    <link rel="stylesheet" href="./styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🚀</text></svg>">
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      
+      body {
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        min-height: 100vh;
+        display: flex;
+        background: #fff;
+      }
+      
+      .login-split {
+        display: flex;
+        width: 100%;
+        min-height: 100vh;
+      }
+      
+      /* Left Panel - Decorative */
+      .login-left {
+        width: 45%;
+        background: linear-gradient(135deg, #c2185b 0%, #e91e63 50%, #ad1457 100%);
+        position: relative;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        padding: 40px;
+      }
+      
+      .login-left::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: 
+          linear-gradient(135deg, transparent 40%, rgba(255,255,255,0.1) 40%, rgba(255,255,255,0.1) 45%, transparent 45%),
+          linear-gradient(225deg, transparent 40%, rgba(255,255,255,0.08) 40%, rgba(255,255,255,0.08) 50%, transparent 50%),
+          linear-gradient(315deg, transparent 30%, rgba(0,0,0,0.1) 30%, rgba(0,0,0,0.1) 40%, transparent 40%);
+      }
+      
+      .login-left-content {
+        position: relative;
+        z-index: 1;
+        text-align: center;
+        color: white;
+      }
+      
+      .login-brand {
+        margin-bottom: 40px;
+      }
+      
+      .login-brand-icon {
+        width: 80px;
+        height: 80px;
+        background: rgba(255,255,255,0.2);
+        border-radius: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 36px;
+        font-weight: 700;
+        margin: 0 auto 20px;
+        backdrop-filter: blur(10px);
+      }
+      
+      .login-brand h2 {
+        font-size: 28px;
+        font-weight: 700;
+        letter-spacing: -0.5px;
+      }
+      
+      .login-tabs-left {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        width: 100%;
+        max-width: 200px;
+      }
+      
+      .tab-btn-left {
+        padding: 16px 24px;
+        background: rgba(255,255,255,0.15);
+        border: 2px solid transparent;
+        border-radius: 12px;
+        color: rgba(255,255,255,0.8);
+        font-size: 15px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        backdrop-filter: blur(10px);
+        text-align: left;
+      }
+      
+      .tab-btn-left:hover {
+        background: rgba(255,255,255,0.25);
+        color: white;
+      }
+      
+      .tab-btn-left.active {
+        background: white;
+        color: #c2185b;
+        border-color: white;
+      }
+      
+      /* Right Panel - Form */
+      .login-right {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 40px;
+        background: #fff;
+      }
+      
+      .login-form-container {
+        width: 100%;
+        max-width: 380px;
+      }
+      
+      .login-form-header {
+        text-align: center;
+        margin-bottom: 40px;
+      }
+      
+      .login-avatar {
+        width: 80px;
+        height: 80px;
+        background: linear-gradient(135deg, #e91e63, #c2185b);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 20px;
+        position: relative;
+      }
+      
+      .login-avatar i {
+        font-size: 36px;
+        color: white;
+      }
+      
+      .login-form-header h1 {
+        font-size: 26px;
+        font-weight: 700;
+        color: #c2185b;
+        margin-bottom: 8px;
+      }
+      
+      .login-form-header p {
+        color: #888;
+        font-size: 14px;
+      }
+      
+      .login-form-box {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+      }
+      
+      .input-group {
+        position: relative;
+      }
+      
+      .input-group i {
+        position: absolute;
+        left: 16px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #c2185b;
+        font-size: 16px;
+      }
+      
+      .input-group input {
+        width: 100%;
+        padding: 16px 16px 16px 48px;
+        border: none;
+        border-bottom: 2px solid #e0e0e0;
+        font-size: 15px;
+        transition: all 0.3s ease;
+        background: transparent;
+        color: #333;
+      }
+      
+      .input-group input:focus {
+        outline: none;
+        border-bottom-color: #e91e63;
+      }
+      
+      .input-group input::placeholder {
+        color: #aaa;
+      }
+      
+      .form-options {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 13px;
+      }
+      
+      .remember-me {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        color: #666;
+        cursor: pointer;
+      }
+      
+      .remember-me input {
+        accent-color: #e91e63;
+      }
+      
+      .forgot-link {
+        color: #e91e63;
+        text-decoration: none;
+        font-weight: 500;
+      }
+      
+      .forgot-link:hover {
+        text-decoration: underline;
+      }
+      
+      .login-submit {
+        padding: 16px 32px;
+        background: linear-gradient(135deg, #e91e63, #c2185b);
+        border: none;
+        border-radius: 8px;
+        color: white;
+        font-size: 15px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
+      
+      .login-submit:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(233, 30, 99, 0.35);
+      }
+      
+      .login-submit:disabled {
+        opacity: 0.7;
+        cursor: not-allowed;
+        transform: none;
+      }
+      
+      .login-error {
+        background: #fff5f5;
+        border: 1px solid #feb2b2;
+        border-radius: 8px;
+        padding: 12px 16px;
+        display: none;
+        align-items: center;
+        gap: 10px;
+        color: #c53030;
+        font-size: 14px;
+      }
+      
+      .login-error i {
+        color: #c53030;
+      }
+      
+      .divider {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        color: #aaa;
+        font-size: 13px;
+        margin: 10px 0;
+      }
+      
+      .divider::before,
+      .divider::after {
+        content: '';
+        flex: 1;
+        height: 1px;
+        background: #e0e0e0;
+      }
+      
+      .social-login {
+        display: flex;
+        justify-content: center;
+        gap: 16px;
+      }
+      
+      .social-btn {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 12px 24px;
+        border: 1px solid #e0e0e0;
+        border-radius: 8px;
+        background: #fff;
+        color: #555;
+        font-size: 13px;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+      
+      .social-btn:hover {
+        border-color: #ccc;
+        background: #f9f9f9;
+      }
+      
+      .social-btn img {
+        width: 18px;
+        height: 18px;
+      }
+      
+      .login-footer-text {
+        text-align: center;
+        margin-top: 24px;
+        color: #888;
+        font-size: 13px;
+      }
+      
+      .login-footer-text a {
+        color: #e91e63;
+        font-weight: 600;
+        text-decoration: none;
+      }
+      
+      .login-footer-text a:hover {
+        text-decoration: underline;
+      }
+      
+      .credentials-hint {
+        text-align: center;
+        font-size: 11px;
+        color: #aaa;
+        margin-top: 16px;
+        padding: 10px;
+        background: #f9f9f9;
+        border-radius: 8px;
+      }
+      
+      /* Responsive */
+      @media (max-width: 900px) {
+        .login-left {
+          display: none;
+        }
+        
+        .login-right {
+          padding: 24px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="login-split">
+      <!-- Left Panel -->
+      <div class="login-left">
+        <div class="login-left-content">
+          <div class="login-brand">
+            <div class="login-brand-icon">S</div>
+            <h2>SPITEN</h2>
+          </div>
+          
+          <div class="login-tabs-left">
+            <button class="tab-btn-left active" data-tab="org-signin" data-mode="signin">
+              <i class="fas fa-building"></i> ORGANISATION
+            </button>
+            <button class="tab-btn-left" data-tab="admin" data-mode="signin">
+              <i class="fas fa-shield-alt"></i> ADMIN
+            </button>
+          </div>
+          
+          <div class="mode-toggle" id="mode-toggle" style="margin-top: 24px; display: flex; gap: 8px;">
+            <button class="mode-btn active" data-mode="signin" style="padding: 10px 20px; background: white; border: none; border-radius: 8px; color: #c2185b; font-weight: 600; font-size: 13px; cursor: pointer; transition: all 0.3s ease;">Sign In</button>
+            <button class="mode-btn" data-mode="signup" id="signup-mode-btn" style="padding: 10px 20px; background: rgba(255,255,255,0.15); border: none; border-radius: 8px; color: rgba(255,255,255,0.8); font-weight: 600; font-size: 13px; cursor: pointer; transition: all 0.3s ease;">Sign Up</button>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Right Panel -->
+      <div class="login-right">
+        <div class="login-form-container">
+          <div class="login-form-header">
+            <div class="login-avatar">
+              <i class="fas fa-user"></i>
+            </div>
+            <h1>LOGIN</h1>
+            <p>Welcome back! Please login to your account.</p>
+          </div>
+          
+          <form id="login-form" class="login-form-box">
+            <div class="input-group" id="org-name-group" style="display: none;">
+              <i class="fas fa-building"></i>
+              <input type="text" name="org_name" id="org-name-input" placeholder="Organization Name">
+            </div>
+            
+            <div class="input-group">
+              <i class="fas fa-user"></i>
+              <input type="email" name="email" placeholder="Email" required>
+            </div>
+            
+            <div class="input-group">
+              <i class="fas fa-lock"></i>
+              <input type="password" name="password" placeholder="Password" required>
+            </div>
+            
+            <div class="input-group" id="confirm-password-group" style="display: none;">
+              <i class="fas fa-lock"></i>
+              <input type="password" name="confirm_password" id="confirm-password-input" placeholder="Confirm Password">
+            </div>
+            
+            <input type="hidden" name="login_type" id="login-type" value="org">
+            <input type="hidden" name="form_mode" id="form-mode" value="signin">
+            
+            <div class="form-options">
+              <label class="remember-me">
+                <input type="checkbox"> Remember me
+              </label>
+              <a href="#" class="forgot-link">Forgot Password?</a>
+            </div>
+            
+            <div class="login-error" id="login-error">
+              <i class="fas fa-exclamation-circle"></i>
+              <span id="login-error-text"></span>
+            </div>
+            
+            <button type="submit" class="login-submit" id="login-btn">LOGIN</button>
+          </form>
+          
+          <div class="divider">Or Login With</div>
+          
+          <div class="social-login">
+            <button type="button" class="social-btn">
+              <i class="fab fa-google" style="color: #DB4437;"></i> Google
+            </button>
+            <button type="button" class="social-btn">
+              <i class="fab fa-facebook-f" style="color: #4267B2;"></i> Facebook
+            </button>
+          </div>
+          
+          <p class="login-footer-text" id="footer-text">
+            New organization? <a href="#" id="switch-to-signup">Sign up here</a>
+          </p>
+          
+          <div class="credentials-hint" id="credentials-hint">
+            Admin: admin@spiten.com / admin123
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="./app.js"></script>
+    <script>
+      let currentTab = 'org-signin';
+      let currentMode = 'signin';
+      
+      // Update UI based on current state
+      function updateUI() {
+        const header = document.querySelector('.login-form-header h1');
+        const subtitle = document.querySelector('.login-form-header p');
+        const btn = document.getElementById('login-btn');
+        const orgNameGroup = document.getElementById('org-name-group');
+        const confirmPwGroup = document.getElementById('confirm-password-group');
+        const modeToggle = document.getElementById('mode-toggle');
+        const footerText = document.getElementById('footer-text');
+        const credentialsHint = document.getElementById('credentials-hint');
+        const orgNameInput = document.getElementById('org-name-input');
+        const confirmPwInput = document.getElementById('confirm-password-input');
+        
+        // Show/hide mode toggle for org only
+        if (currentTab === 'admin') {
+          modeToggle.style.display = 'none';
+          currentMode = 'signin';
+        } else {
+          modeToggle.style.display = 'flex';
+        }
+        
+        // Update form fields
+        if (currentMode === 'signup' && currentTab !== 'admin') {
+          orgNameGroup.style.display = 'block';
+          confirmPwGroup.style.display = 'block';
+          orgNameInput.required = true;
+          confirmPwInput.required = true;
+          header.textContent = 'SIGN UP';
+          subtitle.textContent = 'Create your organization account';
+          btn.textContent = 'SIGN UP';
+          footerText.innerHTML = 'Already have an account? <a href="#" id="switch-to-signin">Sign in here</a>';
+          credentialsHint.style.display = 'none';
+        } else {
+          orgNameGroup.style.display = 'none';
+          confirmPwGroup.style.display = 'none';
+          orgNameInput.required = false;
+          confirmPwInput.required = false;
+          
+          if (currentTab === 'admin') {
+            header.textContent = 'ADMIN LOGIN';
+            subtitle.textContent = 'Access the admin panel';
+            credentialsHint.style.display = 'block';
+          } else {
+            header.textContent = 'SIGN IN';
+            subtitle.textContent = 'Welcome back! Please sign in to your account.';
+            credentialsHint.style.display = 'none';
+          }
+          btn.textContent = 'SIGN IN';
+          footerText.innerHTML = 'New organization? <a href="#" id="switch-to-signup">Sign up here</a>';
+        }
+        
+        // Update hidden fields
+        document.getElementById('login-type').value = currentTab === 'admin' ? 'admin' : 'org';
+        document.getElementById('form-mode').value = currentMode;
+        
+        // Re-attach footer link listeners
+        attachFooterListeners();
+      }
+      
+      function attachFooterListeners() {
+        const switchToSignup = document.getElementById('switch-to-signup');
+        const switchToSignin = document.getElementById('switch-to-signin');
+        
+        if (switchToSignup) {
+          switchToSignup.addEventListener('click', (e) => {
+            e.preventDefault();
+            if (currentTab !== 'admin') {
+              currentMode = 'signup';
+              updateModeButtons();
+              updateUI();
+            }
+          });
+        }
+        
+        if (switchToSignin) {
+          switchToSignin.addEventListener('click', (e) => {
+            e.preventDefault();
+            currentMode = 'signin';
+            updateModeButtons();
+            updateUI();
+          });
+        }
+      }
+      
+      function updateModeButtons() {
+        document.querySelectorAll('.mode-btn').forEach(btn => {
+          if (btn.dataset.mode === currentMode) {
+            btn.style.background = 'white';
+            btn.style.color = '#c2185b';
+            btn.classList.add('active');
+          } else {
+            btn.style.background = 'rgba(255,255,255,0.15)';
+            btn.style.color = 'rgba(255,255,255,0.8)';
+            btn.classList.remove('active');
+          }
+        });
+      }
+      
+      // Tab switching (Organisation / Admin)
+      document.querySelectorAll('.tab-btn-left').forEach(tab => {
+        tab.addEventListener('click', () => {
+          document.querySelectorAll('.tab-btn-left').forEach(t => t.classList.remove('active'));
+          tab.classList.add('active');
+          currentTab = tab.dataset.tab;
+          
+          // Reset to signin when switching tabs
+          currentMode = 'signin';
+          updateModeButtons();
+          updateUI();
+        });
+      });
+      
+      // Mode switching (Sign In / Sign Up)
+      document.querySelectorAll('.mode-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          currentMode = btn.dataset.mode;
+          updateModeButtons();
+          updateUI();
+        });
+      });
+      
+      // Form handler
+      document.getElementById('login-form').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const form = e.target;
+        const fd = new FormData(form);
+        const email = fd.get('email');
+        const password = fd.get('password');
+        const loginType = fd.get('login_type');
+        const formMode = fd.get('form_mode');
+        const orgName = fd.get('org_name');
+        const confirmPassword = fd.get('confirm_password');
+        const errorEl = document.getElementById('login-error');
+        const errorText = document.getElementById('login-error-text');
+        const btn = document.getElementById('login-btn');
+        const origText = btn.innerHTML;
+        
+        // Validate signup
+        if (formMode === 'signup') {
+          if (password !== confirmPassword) {
+            errorText.textContent = 'Passwords do not match!';
+            errorEl.style.display = 'flex';
+            return;
+          }
+          if (!orgName) {
+            errorText.textContent = 'Organization name is required!';
+            errorEl.style.display = 'flex';
+            return;
+          }
+        }
+        
+        btn.disabled = true;
+        btn.innerHTML = formMode === 'signup' ? 'Creating account...' : 'Signing in...';
+        errorEl.style.display = 'none';
+        
+        try {
+          if (formMode === 'signup') {
+            // Create organization
+            const resp = await apiFetch('/org/create', {
+              method: 'POST',
+              headers: {'Content-Type': 'application/json'},
+              body: JSON.stringify({ organization_name: orgName, email: email, password: password })
+            });
+            
+            // Auto login after signup
+            const loginResp = await apiFetch('/admin/login', {
+              method: 'POST',
+              headers: {'Content-Type': 'application/json'},
+              body: JSON.stringify({ email, password })
+            });
+            
+            const token = loginResp?.data?.access_token || loginResp?.data?.token;
+            if (token) {
+              localStorage.setItem('spi_token', token);
+              localStorage.setItem('current_org', orgName);
+              window.location.href = `user-dashboard.html?org=${encodeURIComponent(orgName)}`;
+            }
+          } else {
+            // Sign in
+            const endpoint = loginType === 'admin' ? '/superadmin/login' : '/admin/login';
+            
+            const resp = await apiFetch(endpoint, {
+              method: 'POST',
+              headers: {'Content-Type': 'application/json'},
+              body: JSON.stringify({ email, password })
+            });
+            
+            const token = resp?.data?.access_token || resp?.data?.token;
+            const respOrgName = resp?.data?.organization_name;
+            const role = resp?.data?.role;
+            
+            if (token) {
+              localStorage.setItem('spi_token', token);
+              
+              if (loginType === 'admin' || role === 'superadmin') {
+                localStorage.setItem('admin_role', 'superadmin');
+                window.location.href = 'admin.html';
+              } else {
+                localStorage.setItem('current_org', respOrgName);
+                window.location.href = `user-dashboard.html?org=${encodeURIComponent(respOrgName)}`;
+              }
+            } else {
+              throw new Error('Login response did not contain a token');
+            }
+          }
+        } catch (err) {
+          errorText.textContent = err.message || 'Operation failed. Please try again.';
+          errorEl.style.display = 'flex';
+          btn.disabled = false;
+          btn.innerHTML = origText;
+        }
+      });
+      
+      // Initialize
+      updateUI();
+    </script>
+  </body>
+</html>

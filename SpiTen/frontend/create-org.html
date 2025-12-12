@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Create Organization - SPITEN</title>
+    <link rel="stylesheet" href="./styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🚀</text></svg>">
+  </head>
+  <body class="login-page">
+    <div style="max-width: 560px; width: 100%; padding: 24px;">
+      <div style="text-align: center; margin-bottom: 32px;">
+        <a href="landing.html" style="text-decoration: none;">
+          <div class="login-logo">S</div>
+        </a>
+        <h1 style="font-size: 28px; font-weight: 700; color: var(--text-primary); margin-bottom: 8px;">Create Organization</h1>
+        <p style="color: var(--text-secondary);">Set up a new tenant with isolated data and admin access</p>
+      </div>
+
+      <div class="card">
+        <div class="card-body">
+          <form id="create-org-form">
+            <div class="form-group">
+              <label class="form-label">Organization Name <span style="color: var(--accent-red);">*</span></label>
+              <input type="text" name="organization_name" class="form-input" placeholder="e.g., acme-corp" required>
+              <p class="form-hint">Use lowercase letters, numbers, and hyphens only</p>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Admin Email <span style="color: var(--accent-red);">*</span></label>
+              <input type="email" name="email" class="form-input" placeholder="admin@yourcompany.com" required>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Password <span style="color: var(--accent-red);">*</span></label>
+              <input type="password" name="password" class="form-input" placeholder="Min. 6 characters" required minlength="6">
+              <p class="form-hint">This will be used to login to the organization</p>
+            </div>
+
+            <div id="create-result" style="display: none;"></div>
+
+            <button type="submit" class="btn btn-primary w-100" id="submit-btn">
+              <i class="fas fa-plus"></i> Create Organization
+            </button>
+          </form>
+        </div>
+      </div>
+
+      <div style="text-align: center; margin-top: 24px;">
+        <a href="admin.html" style="color: var(--text-secondary); text-decoration: none; font-size: 14px;">
+          <i class="fas fa-arrow-left"></i> Back to Admin Panel
+        </a>
+      </div>
+    </div>
+
+    <script src="./app.js"></script>
+    <script>
+      document.getElementById('create-org-form').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const form = e.target;
+        const fd = new FormData(form);
+        const btn = document.getElementById('submit-btn');
+        const resultEl = document.getElementById('create-result');
+        const origText = btn.innerHTML;
+
+        btn.disabled = true;
+        btn.innerHTML = '<div class="spinner" style="width: 20px; height: 20px; border-width: 2px;"></div> Creating...';
+        resultEl.style.display = 'none';
+
+        const data = {
+          name: fd.get('organization_name'),
+          admin_email: fd.get('email'),
+          password: fd.get('password')
+        };
+
+        try {
+          const resp = await apiFetch('/organizations', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data)
+          });
+
+          resultEl.className = 'alert alert-success';
+          resultEl.innerHTML = `
+            <i class="fas fa-check-circle alert-icon"></i>
+            <div class="alert-content">
+              <div class="alert-title">Organization Created!</div>
+              <div class="alert-message">Successfully created "${data.name}". You can now login with the admin credentials.</div>
+            </div>
+          `;
+          resultEl.style.display = 'flex';
+          form.reset();
+
+          // Redirect after 2 seconds
+          setTimeout(() => {
+            window.location.href = 'admin.html';
+          }, 2000);
+        } catch (err) {
+          resultEl.className = 'alert alert-error';
+          resultEl.innerHTML = `
+            <i class="fas fa-exclamation-circle alert-icon"></i>
+            <div class="alert-content">
+              <div class="alert-title">Error</div>
+              <div class="alert-message">${err.message || 'Failed to create organization'}</div>
+            </div>
+          `;
+          resultEl.style.display = 'flex';
+        }
+
+        btn.disabled = false;
+        btn.innerHTML = origText;
+      });
+    </script>
+  </body>
+</html>
