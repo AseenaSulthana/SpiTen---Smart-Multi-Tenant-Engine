@@ -69,7 +69,7 @@ spiten/
 
 ```bash
 # Clone the repository
-git clone https://github.com/yourusername/spiten.git
+git clone https://github.com/AseenaSulthana/spiten.git
 cd spiten
 
 # Navigate to backend
@@ -289,3 +289,4 @@ MIT License
 ---
 
 © 2025 SPITEN - Smart Multi-Tenant Engine
+
